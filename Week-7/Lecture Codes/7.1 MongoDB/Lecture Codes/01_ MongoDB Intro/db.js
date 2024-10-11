@@ -11,7 +11,8 @@ const User=new Schema({
 const Todo=new Schema({
     title:String,
     done:Boolean,
-    userId:ObjectId
+    userId:ObjectId,
+    timestamps: true 
 })
 
 const UserModel=mongoose.model('users',User);
