@@ -9,6 +9,10 @@ const mongoose=require('mongoose');
 const {Router}=require("express");
 const { userModel } = require("../db");
 
+//Import userMiddleware to authenticate and authorize users before allowing access to routes
+const { userMiddleware } = require("../middleware/user");
+
+
 const jwt=require('jsonwebtoken');
 const JWT_SECRET="abcd";
 
@@ -115,10 +119,10 @@ const lowercaseRegex = /[a-z]/;
 
     })
     
-    userRouter.get("/purchases",function(req,res){
-        res.json({
-            message:"purchases endpoint"
-        })
+    userRouter.get("/purchases",userMiddleware, function(req,res){
+
+
+        
     })
 
 
