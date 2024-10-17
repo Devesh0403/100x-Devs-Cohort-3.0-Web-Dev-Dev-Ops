@@ -3,18 +3,18 @@
 const express=require('express')
 const mongoose=require('mongoose');
 
-// mongoose.connect("mongodb+srv://devesh04:devesh0404@cluster0.yinli.mongodb.net/coursera-app");
-
-
 const {Router}=require("express");
-const { userModel } = require("../db");
+const userRouter=Router();
+
+const { userModel,purchaseModel } = require("../db");
 
 //Import userMiddleware to authenticate and authorize users before allowing access to routes
-const { userMiddleware } = require("../middleware/user");
+const { userMiddleware } = require("../middlewares/user");
 
 
 const jwt=require('jsonwebtoken');
-const JWT_SECRET="abcd";
+const  {JWT_USER_PASSWORD}  = require("../config")
+// console.log(JWT_USER_PASSWORD);
 
 const bcrypt=require('bcrypt');
 
@@ -22,7 +22,6 @@ const app=express();
 
 const {z}=require('zod')
 
-const userRouter=Router();
 
 const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 const uppercaseRegex = /[A-Z]/;
@@ -94,7 +93,7 @@ const lowercaseRegex = /[a-z]/;
         const{email,password}=req.body;
         // const name=req.body.name;
 
-        const user=await userModel.findOne({
+        const user=await userModel.findOne ({
             email:email,
             
         });
@@ -108,18 +107,42 @@ const lowercaseRegex = /[a-z]/;
         if(isMatch){
             let token=jwt.sign({
                 id:user._id.toString()
-            },JWT_SECRET)
+            },JWT_USER_PASSWORD)
+
+            //cookie based authentication
             
             res.json({
                 token:token,
                 message:'Login successful'
             })
         }
+        else{
+            res.status(403).json({
+                message:"incorrect password"
+            })
+        }
 
 
     })
     
-    userRouter.get("/purchases",userMiddleware, function(req,res){
+    userRouter.get("/purchases",userMiddleware, async function(req,res){
+
+        // console.log(req.userId);
+        res.json({
+            "userId":req.userId
+        })
+
+        const purchases = await purchaseModel.find({
+            userId: req.userId, // Querying purchases by user ID
+        });
+
+        if(!purchases){
+            res.status(403).json({
+                message:"No purchases found"
+            })
+        }
+
+        console.log(purchases)
 
 
         

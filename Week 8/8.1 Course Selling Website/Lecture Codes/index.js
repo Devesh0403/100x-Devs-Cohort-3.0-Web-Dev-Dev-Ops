@@ -12,17 +12,21 @@ const {adminRouter}=require("./routes/admin")
 const app= express();
 app.use(express.json());
 
+require("dotenv").config();
+console.log(process.env.MONGO_URL)
+
+
 
 // createUserRoutes(app);
 // createCourseRoutes(app)
 
 app.use("/api/v1/user",userRouter);
-app.use("api/v1/admin",adminRouter);
+app.use("/api/v1/admin",adminRouter);
 app.use("/api/v1/course",courseRouter);
 
 
 async function main(){
-    await mongoose.connect("mongodb+srv://devesh04:devesh0404@cluster0.yinli.mongodb.net/coursera-app")
+    await mongoose.connect(process.env.MONGO_URL)
     app.listen(3000);
     console.log("Listening on port 3000");
 

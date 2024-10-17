@@ -5,11 +5,15 @@ const {Router}=require('express');
 
 const courseRouter=Router();
 
+const mongoose=require('mongoose');
 
-    courseRouter.post("/purchase",function(req,res){
-        res.json({
-            message:"purchase endpoints"
-        })
+const {userMiddleware}=require("../middlewares/user")
+
+const {purchaseModel,courseModel}=require("../db")
+
+
+    courseRouter.post("/purchase",userMiddleware, function(req,res){
+        
     })
     
     courseRouter.get("/preview",function(req,res){

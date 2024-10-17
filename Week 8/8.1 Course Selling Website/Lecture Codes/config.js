@@ -1,8 +1,11 @@
 // Retrieve the JWT admin password from environment variables
-const JWT_ADMIN_PASSWORD=process.env.JWT_ADMIN_PASSWORD; 
+const JWT_ADMIN_PASSWORD="1234"; 
 
 // Retrieve the JWT user password from environment variables
-const JWT_USER_PASSWORD=process.env.JWT_USER_PASSWORD;
+const JWT_USER_PASSWORD="123456";
+
+// console.log(JWT_ADMIN_PASSWORD)
+
 
 module.exports={
     JWT_ADMIN_PASSWORD,
