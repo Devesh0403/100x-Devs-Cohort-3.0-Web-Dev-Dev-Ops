@@ -12,15 +12,42 @@ const {userMiddleware}=require("../middlewares/user")
 const {purchaseModel,courseModel}=require("../db")
 
 
-    courseRouter.post("/purchase",userMiddleware, function(req,res){
+    courseRouter.post("/purchase",userMiddleware,async function(req,res){
+
+        const userId=req.userId;
+        const courseId=req.body.courseId;
+
+        await purchaseModel.create({
+            courseId:courseId,
+            userId:userId,
+        })
+
+        res.json({
+            message:"You have bought a course"
+        })
         
     })
     
-    courseRouter.get("/preview",function(req,res){
+    courseRouter.get("/preview",async function(req,res){
+        const courses=await courseModel.find({
+
+        })
         res.json({
-            message:"preview endpoints"
+            courses:courses
         })
     })
+
+    // courseRouter.get("/purchases",userMiddleware, async function(req,res){
+    //     const userId=req.userId;
+
+    //     const courses=await courseModel.find({
+    //         userId
+
+    //     })
+    //     res.json({
+    //         courses:courses
+    //     })
+    // })
 
 
 module.exports={

@@ -127,22 +127,33 @@ const lowercaseRegex = /[a-z]/;
     
     userRouter.get("/purchases",userMiddleware, async function(req,res){
 
+        const userId=req.userId;
+
         // console.log(req.userId);
         res.json({
-            "userId":req.userId
+            "userId":userId
         })
+
+        let purchasedCourses=[];
+
 
         const purchases = await purchaseModel.find({
             userId: req.userId, // Querying purchases by user ID
         });
 
-        if(!purchases){
+        for(let i=0;i<purchases.length;i++){
+            if(purchases[i].userId==userId){
+                purchasedCourses.push(purchases[i]);
+            }
+        }
+
+        if(!purchasedCourses){
             res.status(403).json({
                 message:"No purchases found"
             })
         }
 
-        console.log(purchases)
+        console.log(purchasedCourses)
 
 
         
